@@ -14,7 +14,7 @@ export const Home = ({ artists }) => {
       subtitle="profile"
       title={user ? `${user.firstName} ${user.lastName}` : "Name Namesson"}
       description={`${user?.playlistsCount} public playlists`}
-      image="https://raw.githubusercontent.com/Claudiferock/Claudiferock/master/IMG_20181109_090457_295(2).jpg"
+      image="https://picsum.photos/400?random"
     >
       <Box color="white" paddingX="40px" >
         <Box marginBottom="40px">
