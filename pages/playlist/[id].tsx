@@ -1,3 +1,4 @@
+import { redirect } from "next/dist/server/api-utils";
 import GradientLayout from "../../components/gradientLayout";
 import SongTable from "../../components/songsTable";
 import { validateToken } from "../../lib/auth";
@@ -35,12 +36,23 @@ const Playlist = ({ playlist }) => {
 }
 
 export const getServerSideProps = async ({ query, req }) => {
-  const { id } = validateToken(req.cookies.TRAX_ACCESS_TOKEN)
+  let user;
+  try {
+    user = validateToken(req.cookies.TRAX_ACCESS_TOKEN);
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/";
+      }
+    }
+  }
+  
   const [playlist] = await prisma.playlist.findMany({
     where: {
       // the + sign converts it into a number (to fix the bug)
       id: +query.id,
-      userId: id
+      userId: user.id
     },
     include: {
       songs: {
