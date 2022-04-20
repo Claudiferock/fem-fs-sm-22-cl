@@ -1,4 +1,3 @@
-import { redirect } from "next/dist/server/api-utils";
 import GradientLayout from "../../components/gradientLayout";
 import SongTable from "../../components/songsTable";
 import { validateToken } from "../../lib/auth";
@@ -43,8 +42,8 @@ export const getServerSideProps = async ({ query, req }) => {
     return {
       redirect: {
         permanent: false,
-        destination: "/",
-      }
+        destination: "/signin",
+      },
     }
   }
   
@@ -52,7 +51,7 @@ export const getServerSideProps = async ({ query, req }) => {
     where: {
       // the + sign converts it into a number (to fix the bug)
       id: +query.id,
-      userId: user.id
+      userId: user.id,
     },
     include: {
       songs: {
