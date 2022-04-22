@@ -31,7 +31,23 @@ const Player = ({ songs, activeSong }) => {
   const [repeat, setRepeat] = useState(false);
   const [shuffle, setShuffle] = useState(false);
   const [duration, setDuration] = useState(0.0);
-  const soundRef = useRef(null)
+  const soundRef = useRef(null);
+
+  useEffect(() => {
+    let timerId
+
+    if (playing && !isSeeking) {
+      const useReqAnimationFrame = () => {
+        setSeek(soundRef.current.seek())
+        timerId = requestAnimationFrame(useReqAnimationFrame);
+      }
+
+      timerId = requestAnimationFrame(useReqAnimationFrame);
+      return () => cancelAnimationFrame(timerId);
+    }
+
+    cancelAnimationFrame(timerId);
+  }, [playing, isSeeking]);
 
   const setPlayState = value => setPlaying(value);
 
@@ -149,7 +165,7 @@ const Player = ({ songs, activeSong }) => {
       <Box color="gray.600">
         <Flex justify="center" align="center">
           <Box width="10%">
-            <Text fontSize="xs">1:21</Text>
+            <Text fontSize="xs">{formatTime(seek)}</Text>
           </Box>
           <Box width="80%">
             <RangeSlider
